@@ -1,10 +1,15 @@
+import { Loader } from '../Loader/Loader';
+
 /* eslint-disable jsx-a11y/label-has-associated-control */
 type Props = {
   title: string;
+  id: number | null;
   loader: Record<number, boolean>;
 };
 
-export const FakeTodo: React.FC<Props> = ({ title, loader }) => {
+export const TodoItem: React.FC<Props> = ({ title, id, loader }) => {
+  const checked = id ?? 0;
+
   return (
     <div data-cy="Todo" className="todo">
       <label className="todo__status-label">
@@ -13,13 +18,7 @@ export const FakeTodo: React.FC<Props> = ({ title, loader }) => {
       <div data-cy="TodoTitle" className="todo__title">
         {title}
       </div>
-      <div
-        data-cy="TodoLoader"
-        className={`modal overlay ${loader ? 'is-active' : ''}`}
-      >
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
+      <Loader loader={loader} todoId={checked} />
     </div>
   );
 };

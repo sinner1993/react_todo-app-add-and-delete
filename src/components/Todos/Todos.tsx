@@ -18,7 +18,7 @@ type Props = {
   handleAutofocus: () => void;
 };
 
-export const TodoItem: React.FC<Props> = ({
+export const Todos: React.FC<Props> = ({
   todo,
   handleLoading,
   setTodos,
@@ -35,7 +35,7 @@ export const TodoItem: React.FC<Props> = ({
     // eslint-disable-next-line react/jsx-no-comment-textnodes
     <div
       data-cy="Todo"
-      className={classNames('todo item-enter-done', {
+      className={classNames('todo', {
         completed: todo.completed,
       })}
     >

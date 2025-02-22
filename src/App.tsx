@@ -7,9 +7,11 @@ import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { Error } from './components/Error/Error';
 import { Footer } from './components/Footer/Footer';
-import { TodoItem } from './components/Todos/Todos';
+import { Todos } from './components/Todos/Todos';
 import { AddTodos } from './components/AddToDo/AddToDo';
 import { DoUnDoAll } from './components/DoUnDoAll/DoUnDoAll';
+import { FakeToDo } from './types/fakeTodo';
+import { TodoItem } from './components/TodoItem/TodoItem';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState<string>('');
@@ -19,6 +21,7 @@ export const App: React.FC = () => {
   const [counter, setCounter] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [fakeTodo, setFakeTodo] = useState<FakeToDo | null>(null);
 
   useEffect(() => {
     getTodos()
@@ -76,6 +79,7 @@ export const App: React.FC = () => {
             setCounter={setCounter}
             disabled={disabled}
             handleAutofocus={handleAutofocus}
+            setFakeTodo={setFakeTodo}
             handleLoading={handleLoading}
           />
         </header>
@@ -83,20 +87,21 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           {todos.map(todo => {
             return (
-              <>
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  handleLoading={handleLoading}
-                  setTodos={setTodos}
-                  setErrorMesage={setErrorMesage}
-                  loader={loader}
-                  setCounter={setCounter}
-                  handleAutofocus={handleAutofocus}
-                />
-              </>
+              <Todos
+                key={todo.id}
+                todo={todo}
+                handleLoading={handleLoading}
+                setTodos={setTodos}
+                setErrorMesage={setErrorMesage}
+                loader={loader}
+                setCounter={setCounter}
+                handleAutofocus={handleAutofocus}
+              />
             );
           })}
+          {fakeTodo !== null && (
+            <TodoItem title={fakeTodo.title} id={fakeTodo.id} loader={loader} />
+          )}
         </section>
 
         {/* Hide the footer if there are no todos */}

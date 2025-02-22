@@ -1,5 +1,6 @@
 import { Todo } from '../../types/Todo';
-import { addTodos } from '../../api/todos';
+import { addTodos, USER_ID } from '../../api/todos';
+import { FakeToDo } from '../../types/fakeTodo';
 
 type Props = {
   value: string;
@@ -10,6 +11,7 @@ type Props = {
   inputRef: React.MutableRefObject<HTMLInputElement | null>;
   disabled: boolean;
   handleAutofocus: () => void;
+  setFakeTodo: React.Dispatch<React.SetStateAction<FakeToDo | null>>;
   handleLoading: (id: number, state: boolean) => void;
 };
 
@@ -18,11 +20,12 @@ export const AddTodos: React.FC<Props> = ({
   setValue,
   setErrorMesage,
   setTodos,
-  handleLoading,
   inputRef,
   disabled,
   handleAutofocus,
   setCounter,
+  setFakeTodo,
+  handleLoading,
 }) => {
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -30,7 +33,6 @@ export const AddTodos: React.FC<Props> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (!value.trim()) {
       setErrorMesage('Title should not be empty');
       setTimeout(() => setErrorMesage(''), 3000);
@@ -38,40 +40,30 @@ export const AddTodos: React.FC<Props> = ({
       return;
     }
 
-    const tempTodo: Todo = {
-      title: value.trim(),
-      id: Math.floor(Math.random() * 100000000),
-      completed: false,
-      userId: 2283,
-    };
-
     handleAutofocus();
-    setTodos(prev => [...prev, tempTodo]);
+    const tempTodo = { id: 0, title: value.trim() };
+
+    setFakeTodo(tempTodo);
     handleLoading(tempTodo.id, true);
 
     try {
       const response = await addTodos({
-        ...tempTodo,
         id: Math.floor(Math.random() * 100000000),
+        title: value.trim(),
+        userId: USER_ID,
+        completed: false,
       });
 
       if (response.id) {
+        setFakeTodo(null);
         setTodos(prev => [...prev, response]);
-        setTodos(prev => prev.filter(todo => todo.id !== tempTodo.id));
+        setCounter(prev => prev + 1);
         setValue('');
-        setTodos(prev => {
-          setCounter(prev.length);
-
-          return prev;
-        });
       }
     } catch (error) {
-      setTodos(prev => prev.filter(todo => todo.id !== tempTodo.id));
       setErrorMesage('Unable to add a todo');
-      setTimeout(() => {
-        setValue('');
-        setErrorMesage('');
-      }, 3000);
+      setFakeTodo(null);
+      setValue('');
     }
   };
 
