@@ -496,7 +496,7 @@ describe('', () => {
         todos.assertNotCompleted(5);
       });
 
-      it.skip('should not show loaders for existing todos', () => {
+      it('should not show loaders for existing todos', () => {
         todos.assertNotLoading(0);
         todos.assertNotLoading(1);
         todos.assertNotLoading(2);
