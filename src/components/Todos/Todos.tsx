@@ -12,7 +12,6 @@ type Props = {
   todo: Todo;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
-  setCounter: React.Dispatch<React.SetStateAction<number>>;
   handleAutofocus: () => void;
   loader: Record<number, boolean>;
 };
@@ -21,7 +20,6 @@ export const Todos: React.FC<Props> = ({
   todo,
   setTodos,
   setErrorMesage,
-  setCounter,
   handleAutofocus,
   loader,
 }) => {
@@ -55,7 +53,6 @@ export const Todos: React.FC<Props> = ({
           todo={todo}
           setTodos={setTodos}
           setErrorMesage={setErrorMesage}
-          setCounter={setCounter}
           handleAutofocus={handleAutofocus}
         />
       )}

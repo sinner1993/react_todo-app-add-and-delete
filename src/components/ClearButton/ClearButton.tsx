@@ -12,7 +12,6 @@ export const ClearButton: React.FC<Props> = ({
   todos,
   setTodos,
 }) => {
-  const storageTodos = JSON.parse(localStorage.getItem('todosStorage') || '[]');
   const clearCompleted = async () => {
     const completedIds = todos
       .filter(todo => todo.completed)
@@ -20,9 +19,6 @@ export const ClearButton: React.FC<Props> = ({
 
     try {
       await Promise.all(completedIds.map(id => removeTodos(id)));
-      const updatedTodos = storageTodos.filter((todo: Todo) => !todo.completed);
-
-      localStorage.setItem('todosStorage', JSON.stringify(updatedTodos));
       setTodos((prev: Todo[]) => prev.filter((todo: Todo) => !todo.completed));
     } catch (error) {
       // eslint-disable-next-line no-console

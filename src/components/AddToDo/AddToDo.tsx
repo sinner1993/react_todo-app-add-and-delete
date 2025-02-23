@@ -7,7 +7,6 @@ type Props = {
   setValue: React.Dispatch<React.SetStateAction<string>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  setCounter: React.Dispatch<React.SetStateAction<number>>;
   inputRef: React.MutableRefObject<HTMLInputElement | null>;
   disabled: boolean;
   handleAutofocus: () => void;
@@ -24,7 +23,6 @@ export const AddTodos: React.FC<Props> = ({
   inputRef,
   disabled,
   handleAutofocus,
-  setCounter,
   setFakeTodo,
   setLoader,
 }) => {
@@ -32,7 +30,7 @@ export const AddTodos: React.FC<Props> = ({
     setValue(event.target.value);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!value.trim()) {
@@ -46,33 +44,26 @@ export const AddTodos: React.FC<Props> = ({
     const tempId = Math.floor(Math.random() * 100000000);
     const tempTodo = { id: tempId, title: value.trim() };
 
+    setLoader(prev => ({ ...prev, [tempId]: true }));
     setFakeTodo(tempTodo);
 
-    setLoader(prev => ({
-      ...Object.fromEntries(Object.keys(prev).map(key => [Number(key), false])),
-      [tempId]: true,
-    }));
-
-    try {
-      const response = await addTodos({
-        id: tempId,
-        title: value.trim(),
-        userId: USER_ID,
-        completed: false,
-      });
-
-      if (response.id) {
-        setTodos(prev => [...prev, response]);
-        setCounter(prev => prev + 1);
+    addTodos({
+      id: tempId,
+      title: value.trim(),
+      userId: USER_ID,
+      completed: false,
+    })
+      .then(response => {
+        if (response) {
+          setLoader(prev => ({ ...prev, [tempId]: false }));
+          setFakeTodo(null);
+          setTodos(prev => [...prev, response]);
+        }
+      })
+      .catch(() => setErrorMesage('error'))
+      .finally(() => {
         setValue('');
-      }
-    } catch (error) {
-      setErrorMesage('Unable to add a todo');
-      setValue('');
-    } finally {
-      setLoader(prev => ({ ...prev, [tempId]: false }));
-      setFakeTodo(null);
-    }
+      });
   };
 
   return (

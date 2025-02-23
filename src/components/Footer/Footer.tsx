@@ -1,47 +1,28 @@
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
-import { useState } from 'react';
 import { ClearButton } from '../ClearButton/ClearButton';
 import { FilterButtons } from '../FilterButtons/FilterButtons';
 
 type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   todos: Todo[];
-  setCounter: React.Dispatch<React.SetStateAction<number>>;
+  setActiveFilter: React.Dispatch<React.SetStateAction<Status>>;
+  activeFilter: Status;
 };
 
-export const Footer: React.FC<Props> = ({ setTodos, setCounter, todos }) => {
-  const [statusId, setStatusId] = useState<{
-    id: number;
-    isActive: boolean;
-  }>({
-    id: 0,
-    isActive: true,
-  });
+export const Footer: React.FC<Props> = ({
+  setTodos,
+  todos,
+  setActiveFilter,
+  activeFilter,
+}) => {
   const statusOptions = Object.values(Status);
-  const storageTodos = JSON.parse(localStorage.getItem('todosStorage') || '[]');
-  const activeTodos: number = storageTodos.filter(
+  const activeTodos: number = todos.filter(
     (todo: Todo) => !todo.completed,
   ).length;
-  const completedTodos: number = storageTodos.filter(
+  const completedTodos: number = todos.filter(
     (todo: Todo) => todo.completed,
   ).length;
-
-  const handleFiltering = (title: string, id: number) => {
-    setCounter(storageTodos.length);
-    setStatusId({ id, isActive: true });
-
-    switch (title) {
-      case Status.Active:
-        setTodos([...storageTodos].filter(filterTodo => !filterTodo.completed));
-        break;
-      case Status.Completed:
-        setTodos([...storageTodos].filter(filterTodo => filterTodo.completed));
-        break;
-      default:
-        setTodos(storageTodos);
-    }
-  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -54,12 +35,11 @@ export const Footer: React.FC<Props> = ({ setTodos, setCounter, todos }) => {
         {statusOptions.map((title, indx) => {
           return (
             <FilterButtons
+              activeFilter={activeFilter}
               key={indx}
               title={title}
-              id={indx}
-              isActive={statusId.id === indx}
-              handleFiltering={handleFiltering}
-              setStatusId={setStatusId}
+              activeOptions={statusOptions[indx]}
+              setActiveFilter={setActiveFilter}
             />
           );
         })}

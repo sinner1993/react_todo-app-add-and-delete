@@ -12,24 +12,24 @@ import { AddTodos } from './components/AddToDo/AddToDo';
 import { DoUnDoAll } from './components/DoUnDoAll/DoUnDoAll';
 import { FakeToDo } from './types/fakeTodo';
 import { TodoItem } from './components/TodoItem/TodoItem';
+import { handleFiltering } from './utils/handleFiltering';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMesage, setErrorMesage] = useState<string>('');
-  const [counter, setCounter] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [fakeTodo, setFakeTodo] = useState<FakeToDo | null>(null);
   const [loader, setLoader] = useState<Record<number, boolean>>({});
+  const [activeFilter, setActiveFilter] = useState(Status.All);
 
   useEffect(() => {
     getTodos()
       .then(response => {
         setTimeout(() => {
           setTodos(response);
-          setCounter(response.length);
-          localStorage.setItem('todosStorage', JSON.stringify(response));
         }, 300);
       })
       .catch(() => {
@@ -54,6 +54,8 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const filteredTodos = handleFiltering(activeFilter, todos);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -69,7 +71,6 @@ export const App: React.FC = () => {
             setValue={setValue}
             setErrorMesage={setErrorMesage}
             setTodos={setTodos}
-            setCounter={setCounter}
             disabled={disabled}
             handleAutofocus={handleAutofocus}
             setFakeTodo={setFakeTodo}
@@ -79,14 +80,13 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todos.map(todo => {
+          {filteredTodos.map(todo => {
             return (
               <Todos
                 key={todo.id}
                 todo={todo}
                 setTodos={setTodos}
                 setErrorMesage={setErrorMesage}
-                setCounter={setCounter}
                 handleAutofocus={handleAutofocus}
                 loader={loader}
               />
@@ -98,8 +98,13 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        {counter > 0 && (
-          <Footer setTodos={setTodos} todos={todos} setCounter={setCounter} />
+        {todos.length > 0 && (
+          <Footer
+            activeFilter={activeFilter}
+            setTodos={setTodos}
+            todos={todos}
+            setActiveFilter={setActiveFilter}
+          />
         )}
       </div>
 

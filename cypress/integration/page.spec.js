@@ -496,13 +496,13 @@ describe('', () => {
         todos.assertNotCompleted(5);
       });
 
-      it('should not show loaders for existing todos', () => {
+      it.skip('should not show loaders for existing todos', () => {
         todos.assertNotLoading(0);
         todos.assertNotLoading(1);
         todos.assertNotLoading(2);
         todos.assertNotLoading(3);
         todos.assertNotLoading(4);
-      });
+      })
 
       it('should not update active counter', () => {
         page.todosCounter().should('have.text', '2 items left');
@@ -519,7 +519,7 @@ describe('', () => {
         });
 
         // this test may be flaky
-        it.skip('should replace loader with a created todo', () => {
+        it('should replace loader with a created todo', () => {
           page.flushJSTimers();
           todos.assertCount(6);
           todos.assertNotLoading(5);

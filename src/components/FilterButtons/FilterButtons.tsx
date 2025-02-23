@@ -1,30 +1,27 @@
 import classNames from 'classnames';
+import { Status } from '../../types/Status';
 
 type Props = {
   title: string;
-  id: number;
-  handleFiltering: (title: string, id: number) => void;
-  isActive: boolean;
-  setStatusId: (
-    value: React.SetStateAction<{
-      id: number;
-      isActive: boolean;
-    }>,
-  ) => void;
+  setActiveFilter: React.Dispatch<React.SetStateAction<Status>>;
+  activeFilter: Status;
+  activeOptions: Status;
 };
 
 export const FilterButtons: React.FC<Props> = ({
   title,
-  handleFiltering,
-  id,
-  isActive,
+  activeFilter,
+  setActiveFilter,
+  activeOptions,
 }) => {
   return (
     <a
       href="#/"
       data-cy={`FilterLink${title}`}
-      className={classNames('filter__link', { selected: isActive })}
-      onClick={() => handleFiltering(title, id)}
+      className={classNames('filter__link', {
+        selected: title === activeFilter,
+      })}
+      onClick={() => setActiveFilter(activeOptions)}
     >
       {title}
     </a>

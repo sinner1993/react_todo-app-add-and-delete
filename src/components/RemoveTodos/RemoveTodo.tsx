@@ -6,7 +6,6 @@ type Props = {
   todo: Todo;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
-  setCounter: React.Dispatch<React.SetStateAction<number>>;
   handleAutofocus: () => void;
 };
 
@@ -14,7 +13,6 @@ export const RemoveButton: React.FC<Props> = ({
   todo,
   setTodos,
   setErrorMesage,
-  setCounter,
   handleAutofocus,
 }) => {
   const handleRemove = async () => {
@@ -26,7 +24,6 @@ export const RemoveButton: React.FC<Props> = ({
         const removedTodos = prev.filter(item => item.id !== todo.id);
 
         localStorage.setItem('todosStorage', JSON.stringify(removedTodos));
-        setCounter(removedTodos.length);
 
         return removedTodos;
       });
