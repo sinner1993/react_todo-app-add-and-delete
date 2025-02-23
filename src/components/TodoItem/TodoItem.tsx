@@ -7,8 +7,8 @@ type Props = {
   loader: Record<number, boolean>;
 };
 
-export const TodoItem: React.FC<Props> = ({ title, id, loader }) => {
-  const checked = id ?? 0;
+export const TodoItem: React.FC<Props> = ({ title, loader, id }) => {
+  const checked = id !== null ? id : -1;
 
   return (
     <div data-cy="Todo" className="todo">
@@ -18,7 +18,7 @@ export const TodoItem: React.FC<Props> = ({ title, id, loader }) => {
       <div data-cy="TodoTitle" className="todo__title">
         {title}
       </div>
-      <Loader loader={loader} todoId={checked} />
+      <Loader loader={loader} id={checked} />
     </div>
   );
 };

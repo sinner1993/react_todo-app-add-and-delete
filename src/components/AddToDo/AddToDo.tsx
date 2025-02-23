@@ -12,7 +12,8 @@ type Props = {
   disabled: boolean;
   handleAutofocus: () => void;
   setFakeTodo: React.Dispatch<React.SetStateAction<FakeToDo | null>>;
-  handleLoading: (id: number, state: boolean) => void;
+  setLoader: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
+  todos: Todo[];
 };
 
 export const AddTodos: React.FC<Props> = ({
@@ -25,7 +26,7 @@ export const AddTodos: React.FC<Props> = ({
   handleAutofocus,
   setCounter,
   setFakeTodo,
-  handleLoading,
+  setLoader,
 }) => {
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -33,6 +34,7 @@ export const AddTodos: React.FC<Props> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!value.trim()) {
       setErrorMesage('Title should not be empty');
       setTimeout(() => setErrorMesage(''), 3000);
@@ -41,29 +43,35 @@ export const AddTodos: React.FC<Props> = ({
     }
 
     handleAutofocus();
-    const tempTodo = { id: 0, title: value.trim() };
+    const tempId = Math.floor(Math.random() * 100000000);
+    const tempTodo = { id: tempId, title: value.trim() };
 
     setFakeTodo(tempTodo);
-    handleLoading(tempTodo.id, true);
+
+    setLoader(prev => ({
+      ...Object.fromEntries(Object.keys(prev).map(key => [Number(key), false])),
+      [tempId]: true,
+    }));
 
     try {
       const response = await addTodos({
-        id: Math.floor(Math.random() * 100000000),
+        id: tempId,
         title: value.trim(),
         userId: USER_ID,
         completed: false,
       });
 
       if (response.id) {
-        setFakeTodo(null);
         setTodos(prev => [...prev, response]);
         setCounter(prev => prev + 1);
         setValue('');
       }
     } catch (error) {
       setErrorMesage('Unable to add a todo');
-      setFakeTodo(null);
       setValue('');
+    } finally {
+      setLoader(prev => ({ ...prev, [tempId]: false }));
+      setFakeTodo(null);
     }
   };
 

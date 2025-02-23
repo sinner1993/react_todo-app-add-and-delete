@@ -5,14 +5,12 @@ import { updateTodos } from '../../api/todos';
 
 type Props = {
   todo: Todo;
-  handleLoading: (id: number, state: boolean) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const Complete: React.FC<Props> = ({
   todo,
-  handleLoading,
   setTodos,
   setErrorMesage,
 }) => {
@@ -21,8 +19,6 @@ export const Complete: React.FC<Props> = ({
 
     try {
       const updatedResponse: Todo = await updateTodos(todo.id, updatedTodo);
-
-      handleLoading(item.id, true);
 
       setTodos(prev => {
         const updatedTodos = prev.map(el =>

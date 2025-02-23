@@ -3,29 +3,27 @@ import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { UpdateToDo } from '../UpdateTodo/updateTodo';
 import { RemoveButton } from '../RemoveTodos/RemoveTodo';
-import { Loader } from '../Loader/Loader';
 import classNames from 'classnames';
 import { Complete } from '../Complete/Complete';
 import { CallUpdatingForm } from '../callUpdatingForm/callUpdatingForm';
+import { Loader } from '../Loader/Loader';
 
 type Props = {
   todo: Todo;
-  handleLoading: (id: number, state: boolean) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
-  loader: Record<number, boolean>;
   setCounter: React.Dispatch<React.SetStateAction<number>>;
   handleAutofocus: () => void;
+  loader: Record<number, boolean>;
 };
 
 export const Todos: React.FC<Props> = ({
   todo,
-  handleLoading,
   setTodos,
   setErrorMesage,
-  loader,
   setCounter,
   handleAutofocus,
+  loader,
 }) => {
   const id: number = todo.id;
   const [callUpdatingForm, setCallUpdatingForm] = useState<number>(0);
@@ -41,7 +39,6 @@ export const Todos: React.FC<Props> = ({
     >
       <Complete
         todo={todo}
-        handleLoading={handleLoading}
         setTodos={setTodos}
         setErrorMesage={setErrorMesage}
       />
@@ -58,7 +55,6 @@ export const Todos: React.FC<Props> = ({
           todo={todo}
           setTodos={setTodos}
           setErrorMesage={setErrorMesage}
-          handleLoading={handleLoading}
           setCounter={setCounter}
           handleAutofocus={handleAutofocus}
         />
@@ -68,13 +64,12 @@ export const Todos: React.FC<Props> = ({
           oldValue={oldValue}
           setCallUpdatingForm={setCallUpdatingForm}
           todo={todo}
-          handleLoading={handleLoading}
           setTodos={setTodos}
           setErrorMesage={setErrorMesage}
         />
       )}
       {/* Overlay will cover the todo while it is being deleted or updated */}
-      <Loader loader={loader} todoId={todo.id} />
+      <Loader id={id} loader={loader} />
     </div>
   );
 };

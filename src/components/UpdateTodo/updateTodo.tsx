@@ -6,7 +6,6 @@ type Props = {
   oldValue: string;
   setCallUpdatingForm: React.Dispatch<React.SetStateAction<number>>;
   todo: Todo;
-  handleLoading: (id: number, state: boolean) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -15,7 +14,6 @@ export const UpdateToDo: React.FC<Props> = ({
   oldValue,
   setCallUpdatingForm,
   todo,
-  handleLoading,
   setTodos,
   setErrorMesage,
 }) => {
@@ -46,7 +44,6 @@ export const UpdateToDo: React.FC<Props> = ({
         title: updatedValue.trim(),
       });
 
-      handleLoading(todo.id, true);
       setCallUpdatingForm(0);
 
       setTodos(prev =>

@@ -16,12 +16,12 @@ import { TodoItem } from './components/TodoItem/TodoItem';
 export const App: React.FC = () => {
   const [value, setValue] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loader, setLoader] = useState<Record<number, boolean>>({});
   const [errorMesage, setErrorMesage] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [fakeTodo, setFakeTodo] = useState<FakeToDo | null>(null);
+  const [loader, setLoader] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     getTodos()
@@ -39,13 +39,6 @@ export const App: React.FC = () => {
         }, 300);
       });
   }, []);
-
-  const handleLoading = (id: number, state: boolean) => {
-    setTimeout(() => {
-      setLoader(prev => ({ ...prev, [id]: false }));
-    }, 500);
-    setLoader(prev => ({ ...prev, [id]: state }));
-  };
 
   const handleAutofocus = () => {
     setDisabled(true);
@@ -80,7 +73,8 @@ export const App: React.FC = () => {
             disabled={disabled}
             handleAutofocus={handleAutofocus}
             setFakeTodo={setFakeTodo}
-            handleLoading={handleLoading}
+            setLoader={setLoader}
+            todos={todos}
           />
         </header>
 
@@ -90,12 +84,11 @@ export const App: React.FC = () => {
               <Todos
                 key={todo.id}
                 todo={todo}
-                handleLoading={handleLoading}
                 setTodos={setTodos}
                 setErrorMesage={setErrorMesage}
-                loader={loader}
                 setCounter={setCounter}
                 handleAutofocus={handleAutofocus}
+                loader={loader}
               />
             );
           })}

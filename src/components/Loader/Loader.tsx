@@ -1,13 +1,17 @@
+import classNames from 'classnames';
+
 type Props = {
   loader: Record<number, boolean>;
-  todoId: number;
+  id: number;
 };
 
-export const Loader: React.FC<Props> = ({ loader, todoId }) => {
+export const Loader: React.FC<Props> = ({ loader, id }) => {
   return (
     <div
       data-cy="TodoLoader"
-      className={`modal overlay ${loader[todoId] ? 'is-active' : ''}`}
+      className={classNames(`modal overlay`, {
+        'is-active': loader[id],
+      })}
     >
       <div className="modal-background has-background-white-ter" />
       <div className="loader" />
