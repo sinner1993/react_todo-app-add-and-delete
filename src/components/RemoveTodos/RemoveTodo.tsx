@@ -20,13 +20,7 @@ export const RemoveButton: React.FC<Props> = ({
       handleAutofocus();
       setErrorMesage('');
       await removeTodos(todo.id);
-      setTodos((prev: Todo[]) => {
-        const removedTodos = prev.filter(item => item.id !== todo.id);
-
-        localStorage.setItem('todosStorage', JSON.stringify(removedTodos));
-
-        return removedTodos;
-      });
+      setTodos((prev: Todo[]) => prev.filter(item => item.id !== todo.id));
     } catch {
       setErrorMesage('Unable to delete todo');
     }

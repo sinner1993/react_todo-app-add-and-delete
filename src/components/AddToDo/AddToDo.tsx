@@ -47,12 +47,14 @@ export const AddTodos: React.FC<Props> = ({
     setLoader(prev => ({ ...prev, [tempId]: true }));
     setFakeTodo(tempTodo);
 
-    addTodos({
+    const data = {
       id: tempId,
       title: value.trim(),
       userId: USER_ID,
       completed: false,
-    })
+    };
+
+    addTodos(data)
       .then(response => {
         if (response) {
           setLoader(prev => ({ ...prev, [tempId]: false }));

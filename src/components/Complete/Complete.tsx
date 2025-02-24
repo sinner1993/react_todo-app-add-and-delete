@@ -20,15 +20,9 @@ export const Complete: React.FC<Props> = ({
     try {
       const updatedResponse: Todo = await updateTodos(todo.id, updatedTodo);
 
-      setTodos(prev => {
-        const updatedTodos = prev.map(el =>
-          el.id === updatedResponse.id ? updatedResponse : el,
-        );
-
-        localStorage.setItem('todosStorage', JSON.stringify(updatedTodos));
-
-        return updatedTodos;
-      });
+      setTodos(prev =>
+        prev.map(el => (el.id === updatedResponse.id ? updatedResponse : el)),
+      );
     } catch {
       setErrorMesage('Unable to update todo');
     }
