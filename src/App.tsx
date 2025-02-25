@@ -16,13 +16,12 @@ import { handleFiltering } from './utils/handleFiltering';
 import { Status } from './types/Status';
 
 export const App: React.FC = () => {
-  const [value, setValue] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMesage, setErrorMesage] = useState<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [fakeTodo, setFakeTodo] = useState<FakeToDo | null>(null);
-  const [loader, setLoader] = useState<Record<number, boolean>>({});
+  const [loader, setLoader] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState(Status.All);
 
   useEffect(() => {
@@ -62,13 +61,10 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <DoUnDoAll todos={todos} setTodos={setTodos} />
-          {/* Add a todo on form submit */}
+
           <AddTodos
             inputRef={inputRef}
-            value={value}
-            setValue={setValue}
             setErrorMesage={setErrorMesage}
             setTodos={setTodos}
             disabled={disabled}
@@ -89,15 +85,15 @@ export const App: React.FC = () => {
                 setErrorMesage={setErrorMesage}
                 handleAutofocus={handleAutofocus}
                 loader={loader}
+                setLoader={setLoader}
               />
             );
           })}
-          {fakeTodo !== null && (
+          {fakeTodo && (
             <TodoItem title={fakeTodo.title} id={fakeTodo.id} loader={loader} />
           )}
         </section>
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
             activeFilter={activeFilter}
@@ -107,9 +103,6 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
 
       <Error setErrorMesage={setErrorMesage} errorMesage={errorMesage} />
     </div>

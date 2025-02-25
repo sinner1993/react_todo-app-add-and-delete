@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { UpdateToDo } from '../UpdateTodo/updateTodo';
@@ -13,7 +12,8 @@ type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
   handleAutofocus: () => void;
-  loader: Record<number, boolean>;
+  loader: number | null;
+  setLoader: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const Todos: React.FC<Props> = ({
@@ -22,25 +22,27 @@ export const Todos: React.FC<Props> = ({
   setErrorMesage,
   handleAutofocus,
   loader,
+  setLoader,
 }) => {
-  const id: number = todo.id;
-  const [callUpdatingForm, setCallUpdatingForm] = useState<number>(0);
+  const id = todo.id ?? null;
+
+  const [callUpdatingForm, setCallUpdatingForm] = useState<number | null>(0);
   const [oldValue, setOldValueToUpdatingForm] = useState<string>('');
 
   return (
-    // eslint-disable-next-line react/jsx-no-comment-textnodes
     <div
       data-cy="Todo"
       className={classNames('todo', {
         completed: todo.completed,
       })}
     >
-      <Complete
-        todo={todo}
-        setTodos={setTodos}
-        setErrorMesage={setErrorMesage}
-      />
-
+      {
+        <Complete
+          todo={todo}
+          setTodos={setTodos}
+          setErrorMesage={setErrorMesage}
+        />
+      }
       {callUpdatingForm !== id && (
         <CallUpdatingForm
           setCallUpdatingForm={setCallUpdatingForm}
@@ -48,12 +50,14 @@ export const Todos: React.FC<Props> = ({
           setOldValueToUpdatingForm={setOldValueToUpdatingForm}
         />
       )}
+
       {callUpdatingForm !== id && (
         <RemoveButton
           todo={todo}
           setTodos={setTodos}
           setErrorMesage={setErrorMesage}
           handleAutofocus={handleAutofocus}
+          setLoader={setLoader}
         />
       )}
       {callUpdatingForm === id && (
@@ -65,7 +69,6 @@ export const Todos: React.FC<Props> = ({
           setErrorMesage={setErrorMesage}
         />
       )}
-      {/* Overlay will cover the todo while it is being deleted or updated */}
       <Loader id={id} loader={loader} />
     </div>
   );

@@ -4,11 +4,11 @@ import { Loader } from '../Loader/Loader';
 type Props = {
   title: string;
   id: number | null;
-  loader: Record<number, boolean>;
+  loader: number | null;
 };
 
 export const TodoItem: React.FC<Props> = ({ title, loader, id }) => {
-  const checked = id !== null ? id : -1;
+  const checked = id ?? -1;
 
   return (
     <div data-cy="Todo" className="todo">
