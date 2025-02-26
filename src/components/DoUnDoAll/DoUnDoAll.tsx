@@ -8,7 +8,7 @@ type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-export const DoUnDoAll: React.FC<Props> = ({ todos, setTodos }) => {
+export const DoAllTodosComplete: React.FC<Props> = ({ todos, setTodos }) => {
   const allToDoCompleted = todos.every(todo => todo.completed);
 
   const updateComplete = async () => {
@@ -20,7 +20,7 @@ export const DoUnDoAll: React.FC<Props> = ({ todos, setTodos }) => {
 
     try {
       await Promise.all(
-        updatedTodos.map((todo: Todo) => updateTodos(todo.id, todo)),
+        updatedTodos.map((todo: Todo) => updateTodos(todo.id || -1, todo)),
       );
 
       setTodos(updatedTodos);

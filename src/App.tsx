@@ -9,7 +9,7 @@ import { Error } from './components/Error/Error';
 import { Footer } from './components/Footer/Footer';
 import { Todos } from './components/Todos/Todos';
 import { AddTodos } from './components/AddToDo/AddToDo';
-import { DoUnDoAll } from './components/DoUnDoAll/DoUnDoAll';
+import { DoAllTodosComplete } from './components/DoUnDoAll/DoUnDoAll';
 import { FakeToDo } from './types/fakeTodo';
 import { TodoItem } from './components/TodoItem/TodoItem';
 import { handleFiltering } from './utils/handleFiltering';
@@ -61,7 +61,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <DoUnDoAll todos={todos} setTodos={setTodos} />
+          <DoAllTodosComplete todos={todos} setTodos={setTodos} />
 
           <AddTodos
             inputRef={inputRef}
@@ -71,7 +71,6 @@ export const App: React.FC = () => {
             handleAutofocus={handleAutofocus}
             setFakeTodo={setFakeTodo}
             setLoader={setLoader}
-            todos={todos}
           />
         </header>
 

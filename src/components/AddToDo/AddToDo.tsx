@@ -11,7 +11,6 @@ type Props = {
   handleAutofocus: () => void;
   setFakeTodo: React.Dispatch<React.SetStateAction<FakeToDo | null>>;
   setLoader: React.Dispatch<React.SetStateAction<number | null>>;
-  todos: Todo[];
 };
 
 export const AddTodos: React.FC<Props> = ({
