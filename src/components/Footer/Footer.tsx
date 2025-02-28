@@ -2,15 +2,16 @@ import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 import { ClearButton } from '../ClearButton/ClearButton';
 import { FilterButtons } from '../FilterButtons/FilterButtons';
+import { Dispatch, FC } from 'react';
 
 type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   todos: Todo[];
-  setActiveFilter: React.Dispatch<React.SetStateAction<Status>>;
   activeFilter: Status;
+  setActiveFilter: Dispatch<React.SetStateAction<Status>>;
 };
 
-export const Footer: React.FC<Props> = ({
+export const Footer: FC<Props> = ({
   setTodos,
   todos,
   setActiveFilter,

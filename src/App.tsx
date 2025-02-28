@@ -25,28 +25,26 @@ export const App: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState(Status.All);
 
   useEffect(() => {
-    getTodos()
-      .then(response => {
-        setTimeout(() => {
-          setTodos(response);
-        }, 300);
-      })
-      .catch(() => {
-        setErrorMesage('Unable to load todos');
-        setTimeout(() => {
-          setErrorMesage('');
-        }, 300);
-      });
+    setTimeout(() => {
+      getTodos()
+        .then(setTodos)
+        .catch(() => {
+          setErrorMesage('Unable to load todos');
+          setTimeout(() => {
+            setErrorMesage('');
+          }, 300);
+        });
+    }, 300);
   }, []);
 
-  const handleAutofocus = () => {
-    setDisabled(true);
-    setTimeout(() => {
-      setDisabled(false);
-    }, 500);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 550);
+  const handleAutofocus = (isEnabled: boolean) => {
+    if (!isEnabled) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    }
+
+    setDisabled(isEnabled);
   };
 
   if (!USER_ID) {

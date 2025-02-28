@@ -11,7 +11,7 @@ type Props = {
   todo: Todo;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
-  handleAutofocus: () => void;
+  handleAutofocus: (isEnabled: boolean) => void;
   loader: number | null;
   setLoader: React.Dispatch<React.SetStateAction<number | null>>;
 };
@@ -28,12 +28,13 @@ export const Todos: React.FC<Props> = ({
 
   const [callUpdatingForm, setCallUpdatingForm] = useState<number | null>(0);
   const [oldValue, setOldValueToUpdatingForm] = useState<string>('');
+  const todoCompleted = todo.completed;
 
   return (
     <div
       data-cy="Todo"
       className={classNames('todo', {
-        completed: todo.completed,
+        completed: todoCompleted,
       })}
     >
       {

@@ -1,14 +1,15 @@
 import classNames from 'classnames';
 import { Status } from '../../types/Status';
+import { Dispatch, FC } from 'react';
 
 type Props = {
   title: string;
-  setActiveFilter: React.Dispatch<React.SetStateAction<Status>>;
+  setActiveFilter: Dispatch<React.SetStateAction<Status>>;
   activeFilter: Status;
   activeOptions: Status;
 };
 
-export const FilterButtons: React.FC<Props> = ({
+export const FilterButtons: FC<Props> = ({
   title,
   activeFilter,
   setActiveFilter,

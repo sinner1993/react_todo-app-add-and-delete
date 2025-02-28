@@ -6,7 +6,7 @@ type Props = {
   todo: Todo;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
-  handleAutofocus: () => void;
+  handleAutofocus: (isEnabled: boolean) => void;
   setLoader: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
@@ -21,7 +21,7 @@ export const RemoveButton: React.FC<Props> = ({
   const handleRemove = async () => {
     setLoader(id);
     try {
-      handleAutofocus();
+      handleAutofocus(true);
       setErrorMesage('');
       await removeTodos(id);
       setTodos((prev: Todo[]) => prev.filter(item => item.id !== todo.id));
@@ -29,6 +29,7 @@ export const RemoveButton: React.FC<Props> = ({
       setErrorMesage('Unable to delete todo');
     } finally {
       setLoader(null);
+      handleAutofocus(false);
     }
   };
 

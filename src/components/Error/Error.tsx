@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 type Props = {
   setErrorMesage: (message: string) => void;
   errorMesage: string;
@@ -7,7 +9,10 @@ export const Error: React.FC<Props> = ({ setErrorMesage, errorMesage }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${!errorMesage && 'hidden'}`}
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !errorMesage },
+      )}
     >
       <button
         data-cy="HideErrorButton"

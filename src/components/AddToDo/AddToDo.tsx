@@ -8,7 +8,7 @@ type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   inputRef: React.MutableRefObject<HTMLInputElement | null>;
   disabled: boolean;
-  handleAutofocus: () => void;
+  handleAutofocus: (isEnabled: boolean) => void;
   setFakeTodo: React.Dispatch<React.SetStateAction<FakeToDo | null>>;
   setLoader: React.Dispatch<React.SetStateAction<number | null>>;
 };
@@ -38,7 +38,7 @@ export const AddTodos: React.FC<Props> = ({
       return;
     }
 
-    handleAutofocus();
+    handleAutofocus(true);
     const tempId = Math.floor(Math.random() * 100000000);
     const tempTodo = { id: tempId, title: value.trim() };
 
@@ -60,6 +60,7 @@ export const AddTodos: React.FC<Props> = ({
       .catch(() => setErrorMesage('error'))
       .finally(() => {
         setValue('');
+        handleAutofocus(false);
       });
   };
 
