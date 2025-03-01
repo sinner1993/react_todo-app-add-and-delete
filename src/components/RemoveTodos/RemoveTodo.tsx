@@ -26,7 +26,7 @@ export const RemoveButton: React.FC<Props> = ({
       await removeTodos(id);
       setTodos((prev: Todo[]) => prev.filter(item => item.id !== todo.id));
     } catch {
-      setErrorMesage('Unable to delete todo');
+      setErrorMesage('Unable to delete a todo');
     } finally {
       setLoader(null);
       handleAutofocus(false);

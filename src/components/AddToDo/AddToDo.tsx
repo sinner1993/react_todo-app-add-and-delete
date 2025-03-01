@@ -56,11 +56,18 @@ export const AddTodos: React.FC<Props> = ({
         setFakeTodo(null);
         setLoader(null);
         setTodos(prev => [...prev, response]);
-      })
-      .catch(() => setErrorMesage('error'))
-      .finally(() => {
         setValue('');
+      })
+      .catch(() => {
+        setErrorMesage('Unable to add a todo');
+      })
+      .finally(() => {
         handleAutofocus(false);
+        setFakeTodo(null);
+        setTimeout(() => {
+          setErrorMesage('');
+          setValue('');
+        }, 300);
       });
   };
 

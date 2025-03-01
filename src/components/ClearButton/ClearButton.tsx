@@ -1,34 +1,54 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { Todo } from '../../types/Todo';
 import { removeTodos } from '../../api/todos';
 type Props = {
-  completedTodos: number;
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  handleAutofocus: (isEnabled: boolean) => void;
+  setErrorMesage: Dispatch<React.SetStateAction<string>>;
 };
 
 export const ClearButton: React.FC<Props> = ({
-  completedTodos,
   todos,
   setTodos,
+  handleAutofocus,
+  setErrorMesage,
 }) => {
-  const clearCompleted = async () => {
-    const completedIds = todos
-      .filter(todo => todo.completed)
-      .map(todo => todo.id);
+  const isEnabled = todos.some(todo => todo.completed);
 
-    try {
-      await Promise.all(completedIds.map(id => removeTodos(id)));
-      setTodos((prev: Todo[]) => prev.filter((todo: Todo) => !todo.completed));
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to delete', error);
+  const clearCompleted = async () => {
+    handleAutofocus(true);
+
+    const completedTodos = todos.filter(todo => todo.completed);
+    const failedIds: number[] = [];
+
+    for (const todo of completedTodos) {
+      try {
+        await removeTodos(todo.id ?? -1);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Failed to delete todo with id ${todo.id}`, error);
+        failedIds.push(todo.id ?? -1);
+      }
     }
+
+    setTodos(prev =>
+      prev.filter(todo => !todo.completed || failedIds.includes(todo.id ?? -1)),
+    );
+
+    if (failedIds.length > 0) {
+      setErrorMesage('Unable to delete a todo');
+      setTimeout(() => {
+        setErrorMesage('');
+      }, 300);
+    }
+
+    handleAutofocus(false);
   };
 
   return (
     <button
-      disabled={!completedTodos}
+      disabled={!isEnabled}
       type="button"
       className="todoapp__clear-completed"
       data-cy="ClearCompletedButton"

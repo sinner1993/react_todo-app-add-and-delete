@@ -97,6 +97,8 @@ export const App: React.FC = () => {
             setTodos={setTodos}
             todos={todos}
             setActiveFilter={setActiveFilter}
+            handleAutofocus={handleAutofocus}
+            setErrorMesage={setErrorMesage}
           />
         )}
       </div>

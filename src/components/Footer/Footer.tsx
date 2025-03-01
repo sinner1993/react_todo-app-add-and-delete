@@ -9,6 +9,8 @@ type Props = {
   todos: Todo[];
   activeFilter: Status;
   setActiveFilter: Dispatch<React.SetStateAction<Status>>;
+  handleAutofocus: (isEnabled: boolean) => void;
+  setErrorMesage: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const Footer: FC<Props> = ({
@@ -16,13 +18,12 @@ export const Footer: FC<Props> = ({
   todos,
   setActiveFilter,
   activeFilter,
+  handleAutofocus,
+  setErrorMesage,
 }) => {
   const statusOptions = Object.values(Status);
   const activeTodos: number = todos.filter(
     (todo: Todo) => !todo.completed,
-  ).length;
-  const completedTodos: number = todos.filter(
-    (todo: Todo) => todo.completed,
   ).length;
 
   return (
@@ -47,13 +48,12 @@ export const Footer: FC<Props> = ({
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
-      {completedTodos > 0 && (
-        <ClearButton
-          completedTodos={completedTodos}
-          todos={todos}
-          setTodos={setTodos}
-        />
-      )}
+      <ClearButton
+        todos={todos}
+        setTodos={setTodos}
+        handleAutofocus={handleAutofocus}
+        setErrorMesage={setErrorMesage}
+      />
     </footer>
   );
 };
